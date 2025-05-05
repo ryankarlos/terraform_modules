@@ -1,0 +1,5 @@
+pre-commit
+checkov
+#choco install tflint
+#choco install tfsec
+#choco install tfsec
