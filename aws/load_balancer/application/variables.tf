@@ -1,14 +1,4 @@
 
-variable "trust_store_name"{
-  description = "trust store name"
-  type = string
-}
-
-
-variable "trust_store_bucket"{
-  description = "trust store bucket"
-  type = string
-}
 
 variable "vpc_id" {
   description = "ID of the existing VPC"
@@ -75,9 +65,14 @@ variable "tag" {
 
 }
 
+ variable "enable_mtls" {
+   type = bool
+   default = false # Default to not requiring mTLS
+   description = "Enable or disable mutual TLS authentication"
+ }
 
-variable "cert_s3_key" {
-  description = "cert s3 key for trust store"
+variable "trust_store_arn" {
+  description = "trust store arn if mutual tls is enabled"
   type        = string
-  default = "cert.pem"
+  default = ""
 }

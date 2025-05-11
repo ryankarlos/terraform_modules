@@ -4,13 +4,10 @@ module "load_balancer" {
   vpc_id = var.vpc_id
   subnet_ids = var.subnet_ids
   certificate_arn = var.certificate_arn
-  trust_store_bucket = var.trust_store_bucket
-  trust_store_name = var.trust_store_name
   target_group_arn = aws_lb_target_group.ip.arn
   tag = var.tag
   security_group_id = var.security_group_id
   alb_name = var.alb_name
-  cert_s3_key = var.cert_s3_key
 }
 
 

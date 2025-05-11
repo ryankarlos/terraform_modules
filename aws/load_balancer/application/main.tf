@@ -16,6 +16,8 @@ resource "aws_lb" "internal" {
 }
 
 
+
+
 resource "aws_lb_listener" "internal_https" {
   load_balancer_arn = aws_lb.internal.arn
   port              = "443"
@@ -23,10 +25,11 @@ resource "aws_lb_listener" "internal_https" {
   ssl_policy        = "ELBSecurityPolicy-TLS13-1-2-2021-06"
   certificate_arn   = var.certificate_arn
 
+
   mutual_authentication {
-    mode            = "verify"
-    trust_store_arn = aws_lb_trust_store.this.arn
-  }
+       mode = var.enable_mtls ? "verify" : "none"
+       trust_store_arn = var.enable_mtls ? trust_store_arn : null
+     }
 
   default_action {
     type             = "forward"
@@ -45,11 +48,3 @@ resource "aws_lb_listener" "frontend_http" {
   }
 }
 
-
-
-resource "aws_lb_trust_store" "this" {
-    ca_certificates_bundle_s3_bucket = var.trust_store_bucket
-    ca_certificates_bundle_s3_key = var.cert_s3_key
-    name = var.trust_store_name
-
-}
