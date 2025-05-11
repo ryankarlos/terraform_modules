@@ -1,13 +1,4 @@
-variable "trust_store_name"{
-  description = "trust store name"
-  type = string
-}
 
-
-variable "trust_store_bucket"{
-  description = "trust store bucket"
-  type = string
-}
 
 variable "vpc_id" {
   description = "ID of the existing VPC"
