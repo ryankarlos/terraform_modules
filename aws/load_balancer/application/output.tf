@@ -14,12 +14,3 @@ output "zone_id" {
 }
 
 
-output "trust_store_arn" {
-  description = "ARN of the trust store"
-  value       = aws_lb_trust_store.this.arn
-}
-
-output "target_group_arn" {
-  description = "ARN of the target group"
-  value       = aws_lb_trust_store.this.arn
-}
