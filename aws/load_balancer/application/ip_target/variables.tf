@@ -49,8 +49,6 @@ variable "target_group_port" {
 }
 
 
-
-
 variable "target_group_protocol" {
   description = "target group protocol"
   type        = string

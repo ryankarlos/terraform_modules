@@ -16,8 +16,6 @@ resource "aws_lb" "internal" {
 }
 
 
-
-
 resource "aws_lb_listener" "internal_https" {
   load_balancer_arn = aws_lb.internal.arn
   port              = "443"
@@ -28,7 +26,7 @@ resource "aws_lb_listener" "internal_https" {
 
   mutual_authentication {
        mode = var.enable_mtls ? "verify" : "none"
-       trust_store_arn = var.enable_mtls ? trust_store_arn : null
+       trust_store_arn = var.enable_mtls ? var.trust_store_arn : null
      }
 
   default_action {
