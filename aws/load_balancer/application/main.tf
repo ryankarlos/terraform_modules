@@ -25,7 +25,7 @@ resource "aws_lb_listener" "internal_https" {
 
 
   mutual_authentication {
-       mode = var.enable_mtls ? "verify" : "none"
+       mode = var.enable_mtls ? "verify" : "off"
        trust_store_arn = var.enable_mtls ? var.trust_store_arn : null
      }
 
