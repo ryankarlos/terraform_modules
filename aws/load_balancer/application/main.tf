@@ -6,7 +6,7 @@ resource "aws_lb" "internal" {
   security_groups    = [var.security_group_id]
   idle_timeout = var.idle_timeout
   enable_deletion_protection = var.enable_deletion_protection
-    drop_invalid_header_fields = true 
+  drop_invalid_header_fields = true
   dynamic "subnet_mapping" {
     for_each = toset(var.subnet_ids)
     content {
