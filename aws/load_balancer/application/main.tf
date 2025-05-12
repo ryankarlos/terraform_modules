@@ -7,12 +7,8 @@ resource "aws_lb" "internal" {
   idle_timeout = var.idle_timeout
   enable_deletion_protection = var.enable_deletion_protection
   drop_invalid_header_fields = true
-  dynamic "subnet_mapping" {
-    for_each = toset(var.subnet_ids)
-    content {
-      subnet_id = subnet_mapping.value
-    }
-  }
+  subnets = var.subnet_ids
+
 }
 
 
