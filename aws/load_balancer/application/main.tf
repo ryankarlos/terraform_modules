@@ -6,13 +6,9 @@ resource "aws_lb" "internal" {
   security_groups    = [var.security_group_id]
   idle_timeout = var.idle_timeout
   enable_deletion_protection = var.enable_deletion_protection
-    drop_invalid_header_fields = true 
-  dynamic "subnet_mapping" {
-    for_each = toset(var.subnet_ids)
-    content {
-      subnet_id = subnet_mapping.value
-    }
-  }
+  drop_invalid_header_fields = true
+  subnets = var.subnet_ids
+
 }
 
 
@@ -23,10 +19,11 @@ resource "aws_lb_listener" "internal_https" {
   ssl_policy        = "ELBSecurityPolicy-TLS13-1-2-2021-06"
   certificate_arn   = var.certificate_arn
 
+
   mutual_authentication {
-    mode            = "verify"
-    trust_store_arn = aws_lb_trust_store.this.arn
-  }
+       mode = var.enable_mtls ? "verify" : "off"
+       trust_store_arn = var.enable_mtls ? var.trust_store_arn : null
+     }
 
   default_action {
     type             = "forward"
@@ -45,11 +42,3 @@ resource "aws_lb_listener" "frontend_http" {
   }
 }
 
-
-
-resource "aws_lb_trust_store" "this" {
-    ca_certificates_bundle_s3_bucket = var.trust_store_bucket
-    ca_certificates_bundle_s3_key = var.cert_s3_key
-    name = var.trust_store_name
-
-}

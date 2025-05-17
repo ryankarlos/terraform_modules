@@ -19,10 +19,3 @@ output "zone_id" {
   description = "Canonical hosted zone ID of the load balancer (to be used in a Route 53 Alias record)."
   value       = module.load_balancer.zone_id
 }
-
-
-output "trust_store_arn" {
-  description = "ARN of the trust store"
-  value       = module.load_balancer.trust_store_arn
-}
-
