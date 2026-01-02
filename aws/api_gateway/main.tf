@@ -1,6 +1,3 @@
-locals {
-  model_name   = "model"
-}
 
 
 resource "aws_api_gateway_rest_api" "rest_api" {
@@ -8,9 +5,8 @@ resource "aws_api_gateway_rest_api" "rest_api" {
     types = [
       "PRIVATE"
     ]
-    vpc_endpoint_ids = [
-      aws_vpc_endpoint.api_gateway.id
-    ]
+    vpc_endpoint_ids = var.create_vpc_endpoint ? [aws_vpc_endpoint.api_gateway[0].id] : var.external_vpc_endpoint_ids
+
   }
   disable_execute_api_endpoint = true
   name = var.tag.name
@@ -31,7 +27,7 @@ resource "aws_api_gateway_method" "method" {
   resource_id   = aws_api_gateway_resource.resource.id
   rest_api_id   = aws_api_gateway_rest_api.rest_api.id
   request_models       = {
-         "application/json" =local.model_name
+         "application/json" =var.model_name
         }
   request_validator_id = aws_api_gateway_request_validator.example.id
 
@@ -76,6 +72,7 @@ resource "aws_api_gateway_base_path_mapping" "this" {
 
 resource "aws_vpc_endpoint" "api_gateway" {
 
+  count               = var.create_vpc_endpoint ? 1 : 0
   private_dns_enabled = true
   security_group_ids  = [var.vpc_endpoint_security_group_id]
   service_name        = "com.amazonaws.${data.aws_region.current.name}.execute-api"
@@ -148,7 +145,7 @@ resource "aws_api_gateway_deployment" "deployment" {
 # api gateway model
 resource "aws_api_gateway_model" "model" {
   rest_api_id  = aws_api_gateway_rest_api.rest_api.id
-  name         = local.model_name
+  name         = var.model_name
   content_type = "application/json"
 
   schema = var.model_schema

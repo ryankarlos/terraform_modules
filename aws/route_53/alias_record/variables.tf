@@ -18,9 +18,3 @@ variable "alias_zone_id" {
   description = "Hosted zone ID for alias record"
   type        = string
 }
-
-variable "private_hosted_zone" {
-  description = "private or public hosted zone"
-  type = bool
-  default = false
-}

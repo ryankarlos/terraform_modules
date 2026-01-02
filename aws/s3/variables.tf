@@ -102,3 +102,22 @@ variable "require_https" {
   type        = bool
   default     = true # Default to requiring HTTPS
 }
+
+
+variable "event_notifications" {
+  description = "List of event notifications to attach to the S3 bucket."
+  type = list(object({
+    type        = string  # ("lambda", "sns", or "sqs")
+    arn         = string
+    events      = list(string)
+    filter_prefix = string
+    filter_suffix = string
+  }))
+  default = []
+}
+
+variable "enable_bucketnotifications" {
+  description = "Enbales the bucket notifications"
+  type        = bool
+  default     = false
+}

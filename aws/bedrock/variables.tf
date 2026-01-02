@@ -1,4 +1,13 @@
+variable "create_bedrock_vpc_endpoint" {
+  type    = bool
+  default = true
+}
 
+
+variable "existing_bedrock_vpc_endpoint_id" {
+  type = list(string)
+  default = [] 
+}
 
 variable "vpc_id" {
   description = "ID of the existing VPC"
@@ -23,4 +32,18 @@ variable "tag" {
    type = object({
     name = string
   })
+  default = {
+    name     = "project"
+  }
 }
+
+
+variable "security_group_id" {
+  description = "Name of the security group id"
+  type        = string
+}
+
+# variable "main_guardrail_name" {
+#   description = "Name of the bedrock guardrail"
+#   type        = string
+# }

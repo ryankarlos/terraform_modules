@@ -50,6 +50,7 @@ output "endpoint_private_ips" {
   value = local.endpoint_ips
 }
 
+
 output "lambda_id" {
   description = "Lambda function ARN"
   value       = aws_api_gateway_integration.lambda.id

@@ -1,4 +1,16 @@
 
+variable "trust_store_name"{
+  description = "trust store name"
+  type = string
+  default = ""
+}
+
+
+variable "trust_store_bucket"{
+  description = "trust store bucket"
+  type = string
+  default = ""
+}
 
 variable "vpc_id" {
   description = "ID of the existing VPC"
@@ -65,14 +77,62 @@ variable "tag" {
 
 }
 
- variable "enable_mtls" {
-   type = bool
-   default = false # Default to not requiring mTLS
-   description = "Enable or disable mutual TLS authentication"
- }
 
-variable "trust_store_arn" {
-  description = "trust store arn if mutual tls is enabled"
+variable "cert_s3_key" {
+  description = "cert s3 key for trust store"
   type        = string
-  default = ""
+  default = "cert.pem"
+}
+
+
+variable "enable_mutual_authentication" {
+  description = "Enable mutual TLS authentication"
+  type        = bool
+  default     = true
+}
+
+variable "enable_cognito_authentication" {
+  description = "Enable Cognito authentication"
+  type        = bool
+  default     = false
+}
+
+
+variable "user_pool_arn" {
+  description = "cognito user pool arn"
+  type        = string
+  default     = ""
+}
+
+
+variable "user_pool_client_id" {
+  description = "cognito user pool client id"
+  type        = string
+  default     = ""
+}
+
+
+variable "user_pool_domain" {
+  description = "cognito user pool domain"
+  type        = string
+  default     = ""
+}
+
+
+variable "enable_http_listener" {
+  description = "whether to disable http listener"
+  type        = string
+  default     = true
+}
+
+variable "ssl_policy" {
+  description = "lb security policy"
+  type        = string
+  default     = "ELBSecurityPolicy-TLS13-1-2-Res-2021-06"
+}
+
+variable "auth_cookie_timeout" {
+  description = "cookie timeout alb"
+  type        = number
+  default     = 45000
 }

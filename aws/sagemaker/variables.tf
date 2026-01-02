@@ -47,9 +47,9 @@ variable "idle_shutdown" {
 
 variable "users_sso" {
   description = "map of user profile names and valid username of user in iam identity center"
-  type = map(string)
+  type        = map(string)
   validation {
-    condition     = alltrue([ for profilename, _ in var.users_sso: can(regex("^[a-zA-Z0-9](-*[a-zA-Z0-9]){0,62}", profilename))])
+    condition     = alltrue([for profilename, _ in var.users_sso : can(regex("^[a-zA-Z0-9](-*[a-zA-Z0-9]){0,62}", profilename))])
     error_message = "Username must start with alphanumeric character and can contain hyphens between alphanumeric characters. Maximum length is 63 characters. Format: ^[a-zA-Z0-9](-*[a-zA-Z0-9]){0,62}"
   }
   default = {}
@@ -59,7 +59,7 @@ variable "users_sso" {
 variable "users_iam" {
   description = "List of users iam to create for sagemaker domain"
   type        = list(string)
-  default = []
+  default     = []
 }
 
 
@@ -69,12 +69,12 @@ variable "storage_size" {
   type = object(
     {
       default = number
-      max  = number
+      max     = number
     }
   )
   default = {
     default = 20,
-    max = 40
+    max     = 40
   }
 }
 
@@ -87,5 +87,11 @@ variable "hidden_instance_types" {
 variable "auth_mode" {
   description = "sagemaker domain user auth mode"
   type        = string
-  default = "SSO"
+  default     = "SSO"
+}
+
+variable "lifecycle_configuration_arn" {
+  description = "ARN of the lifecycle configuration to use for app settings"
+  type        = string
+  default     = ""
 }

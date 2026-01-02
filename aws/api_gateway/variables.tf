@@ -128,6 +128,22 @@ variable "response_mapping_template" {
   }
 }
 
+variable "model_name" {
+  description = "api gateway model name"
+  type        = string
+  default = "model"
+}
 
 
+variable "external_vpc_endpoint_ids" {
+  type        = list(string)
+  default     = []
+  description = "External VPC endpoint IDs to use when not creating internally"
+}
 
+
+variable "create_vpc_endpoint" {
+  description = "Whether to create the VPC endpoint"
+  type        = bool
+  default     = true
+}

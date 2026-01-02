@@ -19,3 +19,10 @@ output "zone_id" {
   description = "Canonical hosted zone ID of the load balancer (to be used in a Route 53 Alias record)."
   value       = module.load_balancer.zone_id
 }
+
+
+output "https_listener_arn" {
+  description = "https listener arn"
+  value       = module.load_balancer.https_listener_arn
+}
+

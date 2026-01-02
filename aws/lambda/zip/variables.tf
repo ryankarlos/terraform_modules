@@ -75,3 +75,7 @@ variable "source_code_hash" {
   default = ""
 }
 
+variable "create_custom_vpc_policy" {
+  type    = bool
+  default = true
+}

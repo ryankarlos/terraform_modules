@@ -133,3 +133,37 @@ resource "aws_s3_bucket_lifecycle_configuration" "this" {
     status = "Enabled"
   }
 }
+
+resource "aws_s3_bucket_notification" "this" {
+  bucket = aws_s3_bucket.this.id
+  count  = var.enable_bucketnotifications ? 1 : 0
+  dynamic "lambda_function" {
+    for_each = [for n in var.event_notifications : n if n.type == "lambda"]
+    content {
+      lambda_function_arn = lambda_function.value.arn
+      events              = lambda_function.value.events
+      filter_prefix       = lambda_function.value.filter_prefix
+      filter_suffix       = lambda_function.value.filter_suffix
+    }
+  }
+
+  dynamic "queue" {
+    for_each = [for n in var.event_notifications : n if n.type == "sqs"]
+    content {
+      queue_arn    = queue.value.arn
+      events       = queue.value.events
+      filter_prefix = queue.value.filter_prefix
+      filter_suffix = queue.value.filter_suffix
+    }
+  }
+
+  dynamic "topic" {
+    for_each = [for n in var.event_notifications : n if n.type == "sns"]
+    content {
+      topic_arn    = topic.value.arn
+      events       = topic.value.events
+      filter_prefix = topic.value.filter_prefix
+      filter_suffix = topic.value.filter_suffix
+    }
+  }
+}

@@ -1,14 +1,14 @@
-
-# VPC access policy
 resource "aws_iam_policy" "lambda_vpc" {
-  name        = "vpc_ENI"
-  path        = "/"
+  count = var.create_custom_vpc_policy ? 1 : 0
+
+  name = "vpc_ENI"
+  path = "/"
 
   policy = jsonencode({
-    Version = "2012-10-17"
+    Version = "2012-10-17",
     Statement = [
       {
-        Effect = "Allow"
+        Effect = "Allow",
         Action = [
           "ec2:CreateNetworkInterface",
           "ec2:DescribeNetworkInterfaces",
@@ -16,14 +16,12 @@ resource "aws_iam_policy" "lambda_vpc" {
           "ec2:*VpcEndpoint*",
           "cloudwatch:*",
           "logs:*"
-        ]
+        ],
         Resource = "*"
       }
     ]
   })
 }
-
-
 
 # Lambda execution role
 resource "aws_iam_role" "lambda_role" {
@@ -31,11 +29,11 @@ resource "aws_iam_role" "lambda_role" {
   path = "/service-role/"
 
   assume_role_policy = jsonencode({
-    Version = "2012-10-17"
+    Version = "2012-10-17",
     Statement = [
       {
-        Action = "sts:AssumeRole"
-        Effect = "Allow"
+        Action = "sts:AssumeRole",
+        Effect = "Allow",
         Principal = {
           Service = "lambda.amazonaws.com"
         }
@@ -44,13 +42,14 @@ resource "aws_iam_role" "lambda_role" {
   })
 }
 
-# Attach policies to role
+# IAM policy attachment (either existing or newly created)
 resource "aws_iam_role_policy_attachment" "lambda_vpc" {
+  count      = 1
   role       = aws_iam_role.lambda_role.name
-  policy_arn = aws_iam_policy.lambda_vpc.arn
+  policy_arn = try(data.aws_iam_policy.existing_vpc_eni[0].arn, aws_iam_policy.lambda_vpc[0].arn)
 }
 
-
+# Other AWS managed policies
 resource "aws_iam_role_policy_attachment" "lambda_s3" {
   role       = aws_iam_role.lambda_role.name
   policy_arn = "arn:aws:iam::aws:policy/AmazonS3FullAccess"
